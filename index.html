@@ -792,7 +792,7 @@ html.has-cur,html.has-cur body *:not(input):not(select):not(textarea){cursor:non
     let faces=0;
     gltf.scene.traverse(o=>{
       if(!o.isMesh)return;
-      const part=o.userData.faces!==undefined?o:o.parent;
+      const pp=o.parent,part=(pp&&!pp.isScene&&!pp.isMesh&&pp.userData.faces!==undefined)?pp:(o.userData.faces!==undefined?o:pp);
       if(!part.userData.isPart){part.userData.isPart=true;part.userData.label=ROLE[part.name]||'Frame part';part.userData.meshes=[];parts.push(part);faces+=part.userData.faces||0}
       o.userData.part=part;part.userData.meshes.push(o);
       o.userData.mats=makeMats(o.material&&o.material.name);o.material=o.userData.mats.shaded;

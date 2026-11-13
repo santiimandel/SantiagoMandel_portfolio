@@ -6,7 +6,11 @@
 <meta name="description" content="Santiago Mandel, 3D artist and creative technologist from Argentina. Hard-surface, characters, product viz, CGI and real-time 3D on the web.">
 <meta property="og:title" content="Santiago Mandel · 3D Artist &amp; Creative Technologist">
 <meta property="og:description" content="Live 3D viewers, showreel and character work.">
-<meta property="og:image" content="reel_poster.jpg">
+<meta property="og:image" content="https://santiimandel.github.io/SantiagoMandel_portfolio/reel_poster.jpg">
+<meta property="og:url" content="https://santiimandel.github.io/SantiagoMandel_portfolio/">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://santiimandel.github.io/SantiagoMandel_portfolio/">
 <meta name="theme-color" content="#111317">
 <style>
 *,*::before,*::after{box-sizing:border-box}
@@ -200,8 +204,6 @@ section{padding-block:96px}
 .char-info p.lead{color:var(--fg);font-size:19px}
 .char-vp .toolbar{justify-content:space-between}
 
-/* more work */
-.slot.wide{aspect-ratio:auto;min-height:200px}
 .more{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px}
 @media (max-width:700px){.more{grid-template-columns:minmax(0,1fr)}}
 .slot{border:1px dashed var(--line);border-radius:6px;padding:20px;display:grid;gap:10px;min-width:0;aspect-ratio:16/9;align-content:space-between;
@@ -251,6 +253,23 @@ footer .wrap{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px}
   .ctrl input[type=range]{height:32px}
   nav a{padding:10px 0}
 }
+
+
+/* ---------- sound toggle ---------- */
+.snd{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:8px;font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;color:var(--muted);padding:6px 10px;border:1px solid var(--ctl);border-radius:4px;min-height:20px}
+.snd:hover{color:var(--fg)}
+.snd:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.snd[aria-pressed="true"]{color:var(--accent);border-color:var(--accent)}
+.eq{display:inline-flex;align-items:flex-end;gap:2px;height:12px}
+.eq i{width:2px;height:3px;background:currentColor;border-radius:1px;transition:height .2s}
+.snd[aria-pressed="true"] .eq i{animation:eq .9s ease-in-out infinite}
+.snd[aria-pressed="true"] .eq i:nth-child(2){animation-delay:-.3s}.snd[aria-pressed="true"] .eq i:nth-child(3){animation-delay:-.6s}.snd[aria-pressed="true"] .eq i:nth-child(4){animation-delay:-.15s}
+@keyframes eq{0%,100%{height:3px}50%{height:12px}}
+.bar{gap:12px}
+.hdr-r{display:flex;align-items:center;gap:14px}
+@media (max-width:760px){.snd .snd-l{display:none}.snd{padding:8px}}
+@media (pointer:coarse){.snd{min-height:28px}}
+@media (prefers-reduced-motion:reduce){.snd[aria-pressed="true"] .eq i{animation:none;height:8px}}
 
 /* ---------- boot / loading screen ---------- */
 html.booting{overflow:hidden}
@@ -399,7 +418,7 @@ html.has-cur,html.has-cur body *:not(input):not(select):not(textarea){cursor:non
   <div class="wrap bar">
     <a class="brand" href="#top"><i aria-hidden="true"></i>Santiago Mandel</a>
     <nav aria-label="Sections"><a href="#reel">Reel</a><a href="#sh010">Chair</a><a href="#sh020">Eladio</a><a href="#sh030">Kara</a><a href="#sh040">Motion</a><a href="#contact">Contact</a></nav>
-    <span class="avail mono"><span class="now" id="now" aria-live="off">Viewport</span><span class="dot" aria-hidden="true"></span>Available</span>
+    <div class="hdr-r"><button class="snd" type="button" id="snd" aria-pressed="false" aria-label="Sound effects"><span class="eq" aria-hidden="true"><i></i><i></i><i></i><i></i></span><span class="snd-l" id="sndl">Sound off</span></button><span class="avail mono"><span class="now" id="now" aria-live="off">Viewport</span><span class="dot" aria-hidden="true"></span>Available</span></div>
   </div>
   <div class="tl" id="tl" aria-hidden="true"><i class="tl-fill" id="tlfill"></i></div>
 </header>
@@ -472,7 +491,7 @@ html.has-cur,html.has-cur body *:not(input):not(select):not(textarea){cursor:non
       <div class="plate">
         <video id="reelv" src="reel.mp4" poster="reel_poster.jpg" playsinline preload="metadata" aria-label="Santiago Mandel showreel 2026, 24 seconds"></video>
         <div class="slate top"><span class="mono rec">REEL_SANTIAGO_MANDEL_2026</span><span class="mono" id="reeltc">00:00:00:00</span></div>
-        <div class="slate bot"><span class="mono">1920×1080 · 24 fps · 24 s</span><span class="mono">Sound on</span></div>
+        <div class="slate bot"><span class="mono">1600×900 · 24 fps · 24 s</span><span class="mono">Sound on</span></div>
         <button class="bigplay" type="button" id="reelplay" aria-label="Play showreel with sound"><span aria-hidden="true">▶</span><b>Play reel</b></button>
         <div class="reelbar" id="reelbar" hidden>
           <button class="btn" type="button" id="reelpause">Pause</button>
@@ -560,7 +579,7 @@ html.has-cur,html.has-cur body *:not(input):not(select):not(textarea){cursor:non
       <div class="plate" style="margin-top:32px">
         <video id="kara" src="kara.mp4" poster="kara_poster.jpg" muted loop playsinline preload="metadata" aria-label="Kara character render, 8 seconds"></video>
         <div class="slate top"><span class="mono rec">SH030_KARA_v01</span><span class="mono" id="tc">00:00:00:00</span></div>
-        <div class="slate bot"><span class="mono">1920×1080 · 24 fps · 8 s</span><span class="mono">Cinematic lighting</span></div>
+        <div class="slate bot"><span class="mono">1600×900 · 24 fps · 8 s</span><span class="mono">Cinematic lighting</span></div>
         <button class="btn play" type="button" id="playbtn">Pause</button>
       </div>
       <div class="kara-grid">
@@ -628,7 +647,7 @@ html.has-cur,html.has-cur body *:not(input):not(select):not(textarea){cursor:non
   const copyBtn=document.getElementById('copy');
   copyBtn.addEventListener('click',()=>{
     const el=document.getElementById('email');
-    const done=()=>{copyBtn.textContent='Copied';setTimeout(()=>copyBtn.textContent='Copy email',1600)};
+    const done=()=>{SFX.chime();copyBtn.textContent='Copied';setTimeout(()=>copyBtn.textContent='Copy email',1600)};
     const sel=()=>{const r=document.createRange();r.selectNodeContents(el);const s=getSelection();s.removeAllRanges();s.addRange(r);copyBtn.textContent='Selected, press Ctrl+C'};
     try{navigator.clipboard.writeText(el.textContent).then(done).catch(sel)}catch(e){sel()}
   });
@@ -644,6 +663,57 @@ html.has-cur,html.has-cur body *:not(input):not(select):not(textarea){cursor:non
   addEventListener('resize',fitTitle);
 
   document.documentElement.lang='en';
+
+  /* ---------- sound design: synthesized UI sounds, off by default ---------- */
+  const SFX=window.SFX=(function(){
+    let ac=null,master=null,on=false,lastHover=0,duck=1;
+    try{on=localStorage.getItem('sm-sound')==='1'}catch(e){}
+    function ctx(){if(!ac){const A=window.AudioContext||window.webkitAudioContext;if(!A)return null;ac=new A();master=ac.createGain();master.gain.value=.32;
+      const comp=ac.createDynamicsCompressor();comp.threshold.value=-18;master.connect(comp).connect(ac.destination)}
+      if(ac.state==='suspended')ac.resume();return ac}
+    function tone(f,d,o){o=o||{};const c=ctx();if(!c)return;const t=c.currentTime+(o.at||0),os=c.createOscillator(),g=c.createGain();
+      os.type=o.type||'sine';os.frequency.setValueAtTime(f,t);if(o.to)os.frequency.exponentialRampToValueAtTime(o.to,t+d);
+      g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime((o.g||.3)*duck,t+(o.a||.004));g.gain.exponentialRampToValueAtTime(.0001,t+d);
+      let n=os;if(o.lp){const f2=c.createBiquadFilter();f2.type='lowpass';f2.frequency.value=o.lp;n.connect(f2);n=f2}
+      n.connect(g).connect(master);os.start(t);os.stop(t+d+.05)}
+    let nbuf=null;
+    function noise(d,o){o=o||{};const c=ctx();if(!c)return;if(!nbuf){nbuf=c.createBuffer(1,c.sampleRate*.5,c.sampleRate);const a=nbuf.getChannelData(0);for(let i=0;i<a.length;i++)a[i]=Math.random()*2-1}
+      const t=c.currentTime+(o.at||0),src=c.createBufferSource(),bp=c.createBiquadFilter(),g=c.createGain();src.buffer=nbuf;bp.type=o.hp?'highpass':'bandpass';bp.frequency.value=o.f||3000;bp.Q.value=o.q||1.2;
+      g.gain.setValueAtTime((o.g||.25)*duck,t);g.gain.exponentialRampToValueAtTime(.0001,t+d);src.connect(bp).connect(g).connect(master);src.start(t);src.stop(t+d+.02)}
+    const api={
+      get on(){return on},
+      set(v){on=v;try{localStorage.setItem('sm-sound',v?'1':'0')}catch(e){}if(v){ctx();api.chime()}},
+      duck(v){duck=v},
+      hover(){if(!on)return;const n=performance.now();if(n-lastHover<70)return;lastHover=n;tone(2400,.035,{g:.07,type:'triangle'})},
+      click(){if(!on)return;tone(520,.09,{g:.22,to:260,type:'triangle'});noise(.03,{f:2500,g:.08})},
+      shutter(i){if(!on)return;noise(.05,{f:1800+i*600,q:4,g:.22});tone(300+i*120,.07,{g:.12,type:'square',lp:1200,at:.02})},
+      relay(up){if(!on)return;noise(.025,{f:4200,q:6,g:.2});tone(up?880:660,.05,{g:.08,type:'square',lp:2000,at:.015})},
+      notch(v){if(!on)return;tone(300+v*900,.03,{g:.06,type:'triangle'})},
+      land(i){if(!on)return;noise(.04,{f:2200+(i%5)*500,q:3,g:.12});tone(1400+(i%6)*180,.08,{g:.05,type:'sine'})},
+      tock(i){if(!on)return;tone(330*Math.pow(2,(i%7)/12*2),.12,{g:.12,type:'sine'});tone(660*Math.pow(2,(i%7)/12*2),.06,{g:.04,type:'triangle',at:.005})},
+      count(){if(!on)return;tone(3200,.012,{g:.035,type:'square',lp:5000})},
+      chime(){if(!on)return;tone(988,.25,{g:.14});tone(1319,.35,{g:.12,at:.08});tone(1976,.4,{g:.05,at:.08})},
+      whoosh(){if(!on)return;const c=ctx();if(!c)return;noise(.5,{f:600,q:.7,g:.14});tone(180,.45,{g:.08,to:90,lp:600})}
+    };
+    return api;
+  })();
+  (function(){
+    const b=document.getElementById('snd'),l=document.getElementById('sndl');
+    function paint(){b.setAttribute('aria-pressed',SFX.on?'true':'false');l.textContent=SFX.on?'Sound on':'Sound off'}
+    paint();b.addEventListener('click',()=>{SFX.set(!SFX.on);paint()});
+    /* hover ticks on interactive things (mouse only) */
+    let lastEl=null;
+    document.addEventListener('pointerover',e=>{if(e.pointerType!=='mouse')return;const t=e.target.closest('a,button,.seg button,label');if(t&&t!==lastEl){lastEl=t;if(t!==b)SFX.hover()}else if(!t)lastEl=null},{passive:true});
+    /* clicks */
+    document.addEventListener('click',e=>{const t=e.target;
+      const sb=t.closest('.seg button');if(sb){SFX.shutter([...sb.parentNode.children].indexOf(sb));return}
+      if(t.closest('#snd'))return;
+      if(t.closest('a,button'))SFX.click()},true);
+    document.addEventListener('change',e=>{if(e.target.type==='checkbox')SFX.relay(e.target.checked)});
+    let lastNotch=-1;document.addEventListener('input',e=>{if(e.target.type!=='range')return;const v=+e.target.value,step=Math.round(v/5);if(step!==lastNotch){lastNotch=step;SFX.notch(v/100)}});
+    /* duck UI sounds while the reel plays with sound */
+    const rv=document.getElementById('reelv');if(rv){rv.addEventListener('play',()=>{if(!rv.muted)SFX.duck(.35)});rv.addEventListener('pause',()=>SFX.duck(1));rv.addEventListener('ended',()=>SFX.duck(1))}
+  })();
   /* marquee follows the scroll instead of running on its own */
   (function(){const tr=document.querySelector('.track');if(!tr||reduce)return;let x=0,last=scrollY,vel=0;
     addEventListener('scroll',()=>{const d=scrollY-last;last=scrollY;vel+=d*.6},{passive:true});
@@ -659,7 +729,7 @@ html.has-cur,html.has-cur body *:not(input):not(select):not(textarea){cursor:non
       fillEl.style.width=(Math.min(1,y/max)*100)+'%';let active=items[0];
       items.forEach(it=>{const top=it.el.getBoundingClientRect().top+y-innerHeight*.35;const pos=Math.min(.985,Math.max(.006,top/max));it.a.style.left=(pos*100)+'%';const on=y>=top-1;it.a.classList.toggle('on',on);if(on)active=it});
       items.forEach(it=>it.a.classList.toggle('cur',it===active));
-      if(active&&active.l!==cur){cur=active.l;now.classList.add('swap');setTimeout(()=>{now.textContent=cur;now.classList.remove('swap')},150)}}
+      if(active&&active.l!==cur){if(cur)SFX.tock(items.indexOf(active));cur=active.l;now.classList.add('swap');setTimeout(()=>{now.textContent=cur;now.classList.remove('swap')},150)}}
     addEventListener('scroll',upd,{passive:true});addEventListener('resize',upd);setTimeout(upd,300);upd();
   })();
 
@@ -668,7 +738,7 @@ html.has-cur,html.has-cur body *:not(input):not(select):not(textarea){cursor:non
     const els=[...document.querySelectorAll('[data-count]')];if(reduce||!('IntersectionObserver' in window))return;
     const io=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;io.unobserve(e.target);const el=e.target,txt=el.textContent,m=txt.match(/[\d,]+/);if(!m)return;
       const target=+m[0].replace(/,/g,''),pre=txt.slice(0,m.index),post=txt.slice(m.index+m[0].length),t0=performance.now(),D=1100;
-      (function step(){const k=Math.min(1,(performance.now()-t0)/D),e2=1-Math.pow(2,-10*k);el.textContent=pre+Math.round(target*(k<1?e2:1)).toLocaleString('en-US')+post;if(k<1)requestAnimationFrame(step)})()}),{threshold:.6});
+      (function step(){const k=Math.min(1,(performance.now()-t0)/D),e2=1-Math.pow(2,-10*k);el.textContent=pre+Math.round(target*(k<1?e2:1)).toLocaleString('en-US')+post;if(k<1){if(Math.random()<.35)SFX.count();requestAnimationFrame(step)}})()}),{threshold:.6});
     els.forEach(el=>{el.style.fontVariantNumeric='tabular-nums';io.observe(el)});
   })();
 
@@ -677,7 +747,7 @@ html.has-cur,html.has-cur body *:not(input):not(select):not(textarea){cursor:non
     if(!matchMedia('(hover:hover) and (pointer:fine)').matches)return;
     const c=document.getElementById('cur'),lb=document.getElementById('curl');let x=-100,y=-100,cx=-100,cy=-100,on=false;
     document.documentElement.classList.add('has-cur');
-    addEventListener('pointermove',e=>{if(e.pointerType!=='mouse')return;x=e.clientX;y=e.clientY;if(!on){on=true;cx=x;cy=y}
+    addEventListener('pointermove',e=>{if(e.pointerType!=='mouse'){document.documentElement.classList.remove('has-cur');return}document.documentElement.classList.add('has-cur');x=e.clientX;y=e.clientY;if(!on){on=true;cx=x;cy=y}
       const t=e.target;let lab='',link=false;
       if(t.closest('.boot'))lab='SKIP';
       else if(t.closest('.toolbar,.reelbar,input,label'))link=true;
@@ -809,7 +879,7 @@ html.has-cur,html.has-cur body *:not(input):not(select):not(textarea){cursor:non
     bell=parts.find(x=>x.name==='Cylinder:007.006');
     buildTags();
     if(!reduce){introPending=true;meshes.forEach(o=>o.material=o.userData.mats.wire)}
-    BOOT.onReveal(()=>{if(introPending){introPending=false;intro=performance.now()}});
+    BOOT.onReveal(()=>{SFX.whoosh();if(introPending){introPending=false;intro=performance.now()}});
   }
   let intro=null,introPending=false,introMode='wire',userMode=false,bell=null,bellT=-9;
   const PASS={wire:'Render pass · Wireframe',clay:'Render pass · Clay',shaded:'Render pass · Textured'};
@@ -834,7 +904,7 @@ html.has-cur,html.has-cur body *:not(input):not(select):not(textarea){cursor:non
 
   function applyMode(){meshes.forEach(o=>o.material=o.userData.mats[mode]);grid.visible=mode!=='normal';paintSel()}
   function paintSel(){meshes.forEach(o=>{const on=o.userData.part===selected,m=o.userData.mats,em=m.shaded.userData.em;
-    m.shaded.emissiveMap=on?null:em;m.shaded.emissive.setHex(on?0x7a3c00:(em?0xffffff:0));m.shaded.emissiveIntensity=on?1:(em?1.6:1);m.shaded.needsUpdate=true;
+    m.shaded.color.setHex(on?0xffb45a:0xffffff);if(!em)m.shaded.emissive.setHex(on?0x5a2c00:0);
     m.clay.emissive.setHex(on?0x8a4200:0);m.wire.color.setHex(on?0xffa52e:0x7f8896)})}
   const LIGHTS={
     studio:{k:[0xffffff,2.6,[2.5,4,3]],f:[0xdfe6ff,.6,[-3,1.5,2]],r:[0xffffff,1.4,[-1,2.5,-4]],env:1,exp:1.05},
@@ -912,7 +982,7 @@ html.has-cur,html.has-cur body *:not(input):not(select):not(textarea){cursor:non
     exN+=(exT-exN)*Math.min(1,dt*7);
     if(introPending){parts.forEach(p=>p.position.copy(p.userData.base).addScaledVector(p.userData.dir,exN+2.6))}
     else if(intro){const t=(performance.now()-intro)/1000;let all=true;
-      parts.forEach(p=>{const k=Math.min(1,Math.max(0,(t-p.userData.delay)/.7));if(k<1)all=false;const e=1-Math.pow(1-k,3);p.position.copy(p.userData.base).addScaledVector(p.userData.dir,exN+(1-e)*2.6)});
+      let landed=0;parts.forEach((p,pi)=>{const k=Math.min(1,Math.max(0,(t-p.userData.delay)/.7));if(k<1)all=false;else if(!p.userData.landed){p.userData.landed=1;if(landed++<2)SFX.land(pi)}const e=1-Math.pow(1-k,3);p.position.copy(p.userData.base).addScaledVector(p.userData.dir,exN+(1-e)*2.6)});
       const m=t<1.05?'wire':t<1.6?'clay':'shaded';
       if(!userMode&&m!==introMode){introMode=m;meshes.forEach(o=>o.material=o.userData.mats[m])}
       selEl.innerHTML='<span class="pass">'+PASS[userMode?mode:m]+'</span>';

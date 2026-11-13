@@ -907,7 +907,7 @@ html.has-cur,html.has-cur body *:not(input):not(select):not(textarea){cursor:non
     gltf.scene.traverse(o=>{
       if(!o.isMesh&&!o.isLineSegments)return;
       let part=o;while(part.parent&&part.parent!==gltf.scene)part=part.parent;   /* the top-level node is the part */
-      if(!part.userData.isPart){part.userData.isPart=true;part.userData.label=ROLE[part.name]||'Frame part';part.userData.meshes=[];part.userData.tris=0;part.userData.faces=o.userData.faces||0;parts.push(part);faces+=part.userData.faces}
+      if(!part.userData.isPart){part.userData.isPart=true;part.userData.key=part.userData.name||part.name;part.userData.label=ROLE[part.userData.key]||'Frame part';part.userData.meshes=[];part.userData.tris=0;part.userData.faces=o.userData.faces||0;parts.push(part);faces+=part.userData.faces}
       o.userData.part=part;
       if(o.isLineSegments){o.material=lineMat;o.visible=false;o.renderOrder=2;lines.push(o);return}
       part.userData.meshes.push(o);const tri=(o.geometry.index?o.geometry.index.count:o.geometry.attributes.position.count)/3;part.userData.tris+=tri;TRIS+=tri;
@@ -923,7 +923,7 @@ html.has-cur,html.has-cur body *:not(input):not(select):not(textarea){cursor:non
     BOOT.log('glb','mesh ready · '+TRIS.toLocaleString('en-US')+' tris · '+parts.length+' objects',true);
     BOOT.log('sh','compiling shaders');
     const order=parts.slice().sort((a,b)=>a.userData.c.y-b.userData.c.y);order.forEach((p,i)=>p.userData.delay=.15+i/order.length*.75);
-    bell=parts.find(x=>x.name==='Cylinder:007.006');tank=parts.find(x=>x.name==='Cylinder:002.013');
+    bell=parts.find(x=>x.userData.key==='Cylinder:007.006');tank=parts.find(x=>x.userData.key==='Cylinder:002.013');
     buildTags();
     if(!reduce){introPending=true;meshes.forEach(o=>o.material=o.userData.mats.wire);lines.forEach(l=>l.visible=true)}
     try{renderer.compile(scene,camera)}catch(e){}
@@ -935,7 +935,7 @@ html.has-cur,html.has-cur body *:not(input):not(select):not(textarea){cursor:non
   /* callouts = camera bookmarks */
   const cbox=document.getElementById('callouts');let tagEls=[];
   function buildTags(){
-    tagEls=TAGS.map(([n,l,ang,dist])=>{const p=parts.find(x=>x.name===n);if(!p)return null;
+    tagEls=TAGS.map(([n,l,ang,dist])=>{const p=parts.find(x=>x.userData.key===n);if(!p)return null;
       const el=document.createElement('button');el.type='button';el.className='callout'+(n==='Cylinder:007.006'?' bell':'');
       el.innerHTML='<i></i><b>'+(n==='Cylinder:007.006'?'Ring the bell':l)+'</b>';el.setAttribute('aria-label','Focus the camera on the '+l.toLowerCase());
       el.addEventListener('click',e=>{e.stopPropagation();focusOn(p,ang,dist);if(p===bell)setTimeout(ring,450)});

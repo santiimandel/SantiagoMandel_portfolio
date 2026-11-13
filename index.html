@@ -865,7 +865,8 @@ html.has-cur,html.has-cur body *:not(input):not(select):not(textarea){cursor:non
     'Cylinder.023':'Wheel hub','Cylinder:001.019':'Wheel hub','Cylinder:003':'Main frame','Cylinder:013.003':'Lower frame'
   };
   /* tags double as camera bookmarks: [part, label, view angle offset, distance] */
-  const TAGS=[['Cylinder:007.006','Service bell',.4,1.0],['Cylinder:002.013','Pressure readout',2.4,1.1],['BézierCircle.004','Spoked wheel',1.4,1.5],['Cube:004.005','Vinyl backrest',3.0,1.5]];
+  /* [part, label, camera azimuth (null = from the part's side), distance, anchor override] */
+  const TAGS=[['Cylinder:007.006','Service bell',null,1.0],['Cube:002.007','Pressure readout',Math.PI/2,.75],['BézierCircle.004','Spoked wheel',Math.PI/2,1.5,[.14,.47,0]],['Cube:004.005','Vinyl backrest',null,1.5]];
 
   /* texture-channel inspection: base color, roughness, metallic, normal, UV checker */
   const CH=['base','rough','metal','normal','uv'],CHL={base:'Base color',rough:'Roughness',metal:'Metallic',normal:'Normal map',uv:'UV checker'};
@@ -935,7 +936,7 @@ html.has-cur,html.has-cur body *:not(input):not(select):not(textarea){cursor:non
   /* callouts = camera bookmarks */
   const cbox=document.getElementById('callouts');let tagEls=[];
   function buildTags(){
-    tagEls=TAGS.map(([n,l,ang,dist])=>{const p=parts.find(x=>x.userData.key===n);if(!p)return null;
+    tagEls=TAGS.map(([n,l,ang,dist,anc])=>{const p=parts.find(x=>x.userData.key===n);if(!p)return null;if(anc)p.userData.anchor=new THREE.Vector3(...anc);
       const el=document.createElement('button');el.type='button';el.className='callout'+(n==='Cylinder:007.006'?' bell':'');
       el.innerHTML='<i></i><b>'+(n==='Cylinder:007.006'?'Ring the bell':l)+'</b>';el.setAttribute('aria-label','Focus the camera on the '+l.toLowerCase());
       el.addEventListener('click',e=>{e.stopPropagation();focusOn(p,ang,dist);if(p===bell)setTimeout(ring,450)});
@@ -947,7 +948,7 @@ html.has-cur,html.has-cur body *:not(input):not(select):not(textarea){cursor:non
   function drawTags(){
     const r=stage.getBoundingClientRect();
     tagEls.forEach(({p,el})=>{
-      v3.copy(p.userData.c).add(p.position).sub(p.userData.base);v3.project(camera);
+      v3.copy(p.userData.anchor||p.userData.c).add(p.position).sub(p.userData.base);v3.project(camera);
       const x=(v3.x*.5+.5)*r.width,y=(-v3.y*.5+.5)*r.height,show=tagsOn.checked&&!focused&&v3.z<1&&x<r.width-150&&x>10&&y>70&&y<r.height-80;
       el.style.transform='translate('+(x-5).toFixed(1)+'px,'+(y-9).toFixed(1)+'px)';
       el.style.opacity=show?1:0;el.style.pointerEvents=show?'auto':'none';el.tabIndex=show?0:-1;
@@ -988,8 +989,8 @@ html.has-cur,html.has-cur body *:not(input):not(select):not(textarea){cursor:non
   let theta=-2.3,phi=1.2,radius=4.2,baseRadius=4.2,vel=0,drag=null,focused=false,engaged=false;
   const goal={theta,phi,radius,target:target.clone(),on:false};
   const resetBtn=document.getElementById('vreset');
-  function focusOn(p,ang,dist){const c=v3.copy(p.userData.c).add(p.position).sub(p.userData.base);
-    goal.target.copy(c);goal.theta=Math.atan2(c.x-center.x,c.z-center.z)+ (ang-1.6)*.5;goal.phi=1.05;goal.radius=dist;goal.on=true;focused=true;spin.checked=false;
+  function focusOn(p,ang,dist){const c=v3.copy(p.userData.anchor||p.userData.c).add(p.position).sub(p.userData.base);
+    goal.target.copy(c);goal.theta=ang==null?Math.atan2(c.x-center.x,c.z-center.z):ang;goal.phi=1.25;goal.radius=dist;goal.on=true;focused=true;spin.checked=false;
     selected=p;locked=true;paintSel();showSel();resetBtn.hidden=false}
   function resetView(){goal.target.set(center.x,.62,center.z);goal.radius=baseRadius;goal.phi=1.2;goal.theta=theta;goal.on=true;focused=false;resetBtn.hidden=true;selected=null;locked=false;paintSel();showSel()}
   resetBtn.addEventListener('click',resetView);

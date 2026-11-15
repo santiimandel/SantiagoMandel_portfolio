@@ -282,6 +282,10 @@ button.callout:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
 .links{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
 
 @media (max-width:560px){.af{display:none}}
+
+/* case titles size to their own column so long words never break mid-word */
+.case>div,.char-info{container-type:inline-size}
+.case .case-h,.char-info .case-h{font-size:clamp(34px,9.6cqi,88px);overflow-wrap:normal;hyphens:none}
 /* ---------- sound toggle ---------- */
 .snd{all:unset;cursor:pointer;display:inline-flex;align-items:center;gap:8px;font-family:var(--f-mono);font-size:12px;letter-spacing:.08em;color:var(--muted);padding:6px 10px;border:1px solid var(--ctl);border-radius:4px;min-height:20px}
 .snd:hover{color:var(--fg)}
@@ -693,6 +697,9 @@ html.has-cur,html.has-cur body *:not(input):not(select):not(textarea){cursor:non
     if(max>w)h1.style.fontSize=Math.floor(cs*w/max*0.98)+'px'}
   fitTitle();(document.fonts&&document.fonts.ready||Promise.resolve()).then(fitTitle);
   addEventListener('resize',fitTitle);
+  /* case titles: if a word is still wider than its column, shrink it instead of breaking it */
+  function fitCases(){document.querySelectorAll('.case .case-h,.char-info .case-h').forEach(h=>{h.style.fontSize='';if(h.scrollWidth>h.clientWidth+1){const f=parseFloat(getComputedStyle(h).fontSize);h.style.fontSize=Math.floor(f*h.clientWidth/h.scrollWidth*.98)+'px'}})}
+  fitCases();(document.fonts&&document.fonts.ready||Promise.resolve()).then(fitCases);addEventListener('resize',fitCases);
 
   document.documentElement.lang='en';
 
